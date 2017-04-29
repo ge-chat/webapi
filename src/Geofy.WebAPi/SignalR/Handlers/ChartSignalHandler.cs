@@ -1,9 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Geofy.Infrastructure.ServiceBus.Dispatching.Interfaces;
-using Geofy.ReadModels;
 using Geofy.Signals;
 using Geofy.WebAPi.SignalR.Hubs;
-using Geofy.WebAPi.ViewModels.Chart;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 
@@ -21,18 +20,28 @@ namespace Geofy.WebAPi.SignalR.Handlers
 
         public Task HandleAsync(ChartCreatedSignal message)
         {
-            _chartHub.Clients.Group(message.Metadata.UserId).chartCreated(new ChartViewModel
-            {
-                Id = message.ChartId,
-                Title = message.Title,
-                Location = message.Location,
-                Radius = message.Radius,
-                Description = message.Description,
-                OwnerId = message.OwnerId,
-                AdminIds = message.AdminIds,
-                Participants = message.Participants
-            });
+            _chartHub.Clients.Group(message.Metadata.UserId).chartCreated(Map(message));
             return Task.CompletedTask;
+        }
+
+        //Convert to camelcase due to SignalR configuration mismatch
+        private object Map(ChartCreatedSignal message)
+        {
+            return new
+            {
+                id = message.ChartId,
+                title = message.Title,
+                location = new
+                {
+                    longitude = message.Location.Longitude,
+                    latitude = message.Location.Latitude
+                },
+                radius = message.Radius,
+                description = message.Description,
+                ownerId = message.OwnerId,
+                adminIds = message.AdminIds,
+                participants = message.Participants.Select(x => new {userId = x.UserId, userName = x.UserName})
+            };
         }
     }
 }
