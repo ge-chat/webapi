@@ -6,7 +6,7 @@
   "projectUrl": "",
   "licenseUrl": "",
   "frameworks": {
-    "net46": { }
+    "dnx46": { }
   },
   "dependencies": {
     "Geofy.Domain.Commands": "1.0.0-*",

@@ -6,7 +6,7 @@
   "projectUrl": "",
   "licenseUrl": "",
   "frameworks": {
-    "net46": { }
+    "dnx46": { }
   },
   "dependencies": {
     "EasyNetQ": "0.56.0.427",
