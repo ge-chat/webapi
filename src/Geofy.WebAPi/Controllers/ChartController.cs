@@ -47,6 +47,12 @@ namespace Geofy.WebAPi.Controllers
                 .ToList();
         }
 
+        [HttpGet("{id}")]
+        public Task<ChartReadModel> GetById(string id)
+        {
+            return _chartReadModelService.GetByIdAsync(id);
+        }
+
         private ChartViewModelShort Map(ChartReadModel model)
         {
             return new ChartViewModelShort
@@ -61,7 +67,8 @@ namespace Geofy.WebAPi.Controllers
                 OwnerId = model.OwnerId,
                 Participants = model.Participants,
                 Radius = model.Radius,
-                Title = model.Title
+                Title = model.Title,
+                LastMessage = model.LastMessage
             };
         }
     }
