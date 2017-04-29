@@ -4,7 +4,8 @@
     {
          public static class Errors
          {
-             public const string UserAlreadyRegistred = "UserAlreadyRegistred";
+             public const string UserAlreadyRegistred = "userAlreadyRegistred";
+             public const string UserInvalidCredentials = "userInvalidCredentials";
          }
     }
 }

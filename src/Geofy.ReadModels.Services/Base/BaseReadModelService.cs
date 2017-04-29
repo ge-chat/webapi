@@ -16,7 +16,7 @@ namespace Geofy.ReadModels.Services.Base
             _items = items;
         }
 
-        public virtual Task<T> GetById(string id, TFilter filter = null)
+        public virtual Task<T> GetByIdAsync(string id, TFilter filter = null)
         {
             if (string.IsNullOrEmpty(id))
                 return Task.FromResult(default(T));
@@ -28,12 +28,12 @@ namespace Geofy.ReadModels.Services.Base
             return GetCursorByFilter(filter).FirstOrDefaultAsync();
         }
 
-        public Task<List<T>> GetAll()
+        public Task<List<T>> GetAllAsync()
         {
             return GetCursorByFilter(new TFilter()).ToListAsync();
         }
 
-        public Task<long> Count(TFilter filter)
+        public Task<long> CountAsync(TFilter filter)
         {
             return GetCursorByFilter(filter).CountAsync();
         }

@@ -36,7 +36,7 @@
   },
 
   "frameworks": {
-    "dnx46": { }
+    "net46": { }
   },
 
   "exclude": [

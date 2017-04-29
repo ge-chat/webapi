@@ -24,8 +24,8 @@ namespace Geofy.WebAPi.Controllers
             if (userExists)
             {
                 ModelState.AddModelError(MessageConstants.Errors.UserAlreadyRegistred, "");
-                return new BadRequestObjectResult(ModelState);
             }
+            if(!ModelState.IsValid) return new BadRequestObjectResult(ModelState);
 
             var salt = _authenticationService.GenerateSalt();
             await CommandBus.SendAsync(new RegisterUser
@@ -38,6 +38,18 @@ namespace Geofy.WebAPi.Controllers
             });
 
             return new HttpOkResult();
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody]LoginViewModel model)
+        {
+            var user = await _authenticationService.ValidateUser(model.Email, model.Password);
+            if (user == null)
+            {
+                ModelState.AddModelError(MessageConstants.Errors.UserInvalidCredentials, "");
+            }
+            if (!ModelState.IsValid) return new BadRequestObjectResult(ModelState);
+            return new HttpOkObjectResult(_authenticationService.GetToken(user));
         }
     }
 }
