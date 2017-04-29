@@ -50,7 +50,9 @@ namespace Geofy.WebAPi.Controllers
                 ModelState.AddModelError("", MessageConstants.Errors.UserInvalidCredentials);
             }
             if (!ModelState.IsValid) return new GeofyBadRequest(ModelState);
-            return new HttpOkObjectResult(_authenticationService.GetToken(user));
+            return new HttpOkObjectResult(new {
+                token = _authenticationService.GetToken(user)}
+            );
         }
     }
 }
