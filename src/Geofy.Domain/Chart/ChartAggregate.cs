@@ -19,5 +19,17 @@ namespace Geofy.Domain.Chart
                 Description = cmd.Description
             });
         }
+
+        public void PostMessage(PostMessage cmd)
+        {
+            Apply(new MessagePosted
+            {
+                Created = cmd.Created,
+                ChartId = cmd.ChartId,
+                Message = cmd.Message,
+                MessageId = cmd.MessageId,
+                UserId = cmd.UserId
+            });
+        }
     }
 }

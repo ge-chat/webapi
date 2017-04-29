@@ -82,7 +82,7 @@ namespace Geofy.WebAPI.Services
 
         private static void RegisterBsonMaps()
         {
-            //BsonClassMap.RegisterClassMap<UserView>();
+            BsonClassMap.RegisterClassMap<EventMetadata>();
         }
 
         private void ConfigureEventStore(IContainer container)

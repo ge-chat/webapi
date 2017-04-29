@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using Geofy.Domain.Events.Chart;
 using Geofy.Infrastructure.ServiceBus.Dispatching.Interfaces;
 using Geofy.Infrastructure.ServiceBus.Interfaces;
@@ -11,8 +12,9 @@ using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace Geofy.EventHandlers
 {
-    public class ChartEventHandler 
-        : IMessageHandlerAsync<ChartCreated>
+    public class ChartEventHandler :
+        IMessageHandlerAsync<ChartCreated>,
+        IMessageHandlerAsync<MessagePosted>
     {
         private readonly IMongoCollection<ChartReadModel> _chartMongoCollection;
         private readonly UserReadModelService _userReadModelService;
@@ -38,8 +40,8 @@ namespace Geofy.EventHandlers
                 Radius = message.Radius,
                 Description = message.Description,
                 OwnerId = user.Id,
-                AdminIds = new[] {user.Id},
-                Participants = new[] {new Participant {UserId = user.Id, UserName = user.UserName}}
+                AdminIds = new[] { user.Id },
+                Participants = new[] { new Participant { UserId = user.Id, UserName = user.UserName } }
             };
             await _chartMongoCollection.InsertOneAsync(chart);
             await _messageBus.SendRealTimeMessageAsync(new ChartCreatedSignal
@@ -56,6 +58,40 @@ namespace Geofy.EventHandlers
                 OwnerId = chart.OwnerId,
                 AdminIds = chart.AdminIds,
                 Participants = chart.Participants,
+                Metadata = new MessageMetadata
+                {
+                    UserId = message.Metadata.UserId,
+                    MessageId = message.Metadata.EventId
+                }
+            });
+        }
+
+        public async Task HandleAsync(MessagePosted message)
+        {
+            var user = await _userReadModelService.GetByIdAsync(message.UserId);
+            await _chartMongoCollection.UpdateOneAsync(
+                Builders<ChartReadModel>.Filter.Eq(x => x.Id, message.ChartId),
+                Builders<ChartReadModel>.Update.Push(x => x.Messages, new MessageReadModel
+                {
+                    Created = message.Created,
+                    UserId = message.UserId,
+                    Id = message.ChartId,
+                    Message = message.Message
+                }).Set(x => x.LastMessage, new ShortMessage
+                {
+                    Created = message.Created,
+                    UserId = message.UserId,
+                    MessageId = message.ChartId,
+                    Message = message.Message
+                })
+                .AddToSet(x => x.Participants, new Participant { UserId = user.Id, UserName = user.UserName }));
+            await _messageBus.SendRealTimeMessageAsync(new MessagePostedSignal
+            {
+                Created = message.Created,
+                UserId = message.UserId,
+                MessageId = message.ChartId,
+                Message = message.Message,
+                ChartId = message.ChartId,
                 Metadata = new MessageMetadata
                 {
                     UserId = message.Metadata.UserId,

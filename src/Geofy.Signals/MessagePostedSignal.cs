@@ -1,11 +1,13 @@
 ﻿using System;
+using Geofy.Infrastructure.ServiceBus.Messages;
 
-namespace Geofy.ReadModels
+namespace Geofy.Signals
 {
-    public class ShortMessage
+    public class MessagePostedSignal : Message
     {
         public string MessageId { get; set; }
         public string UserId { get; set; }
+        public string ChartId { get; set; }
         public DateTime Created { get; set; }
         public string Message { get; set; }
     }

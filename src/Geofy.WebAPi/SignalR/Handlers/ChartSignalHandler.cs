@@ -8,8 +8,9 @@ using Microsoft.AspNetCore.SignalR.Infrastructure;
 
 namespace Geofy.WebAPi.SignalR.Handlers
 {
-    public class ChartSignalHandler
-        :IMessageHandlerAsync<ChartCreatedSignal>
+    public class ChartSignalHandler :
+        IMessageHandlerAsync<ChartCreatedSignal>,
+        IMessageHandlerAsync<MessagePostedSignal>
     {
         private readonly IHubContext _chartHub;
 
@@ -21,6 +22,12 @@ namespace Geofy.WebAPi.SignalR.Handlers
         public Task HandleAsync(ChartCreatedSignal message)
         {
             _chartHub.Clients.Group(message.Metadata.UserId).chartCreated(Map(message));
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(MessagePostedSignal message)
+        {
+            _chartHub.Clients.Group(message.Metadata.UserId).messagePosted(Map(message));
             return Task.CompletedTask;
         }
 
@@ -40,7 +47,20 @@ namespace Geofy.WebAPi.SignalR.Handlers
                 description = message.Description,
                 ownerId = message.OwnerId,
                 adminIds = message.AdminIds,
-                participants = message.Participants.Select(x => new {userId = x.UserId, userName = x.UserName})
+                participants = message.Participants.Select(x => new {userId = x.UserId, userName = x.UserName}),
+                messages = new object[0]
+            };
+        }
+
+        private object Map(MessagePostedSignal message)
+        {
+            return new
+            {
+                id = message.MessageId,
+                chartId = message.ChartId,
+                created = message.Created,
+                message = message.Message,
+                userId = message.UserId
             };
         }
     }
