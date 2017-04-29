@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0-*",
+  "description": "Geofy.Infrastructure Class Library",
+  "authors": [ "tarne" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "frameworks": {
+    "net46": { }
+  },
+  "dependencies": {
+  }
+}

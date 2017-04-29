@@ -1,0 +1,15 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Geofy.Infrastructure.ServiceBus.RabbitMq Class Library",
+  "authors": [ "tarne" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "frameworks": {
+    "net46": { }
+  },
+  "dependencies": {
+    "EasyNetQ": "0.56.0.427",
+    "Geofy.Infrastructure.ServiceBus": "1.0.0-*"
+  }
+}

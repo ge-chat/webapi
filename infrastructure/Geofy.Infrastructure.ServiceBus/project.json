@@ -1,0 +1,11 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Geofy.Infrastructure.ServiceBus Class Library",
+  "authors": [ "tarne" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "frameworks": {
+    "net46": { }
+  }
+}
