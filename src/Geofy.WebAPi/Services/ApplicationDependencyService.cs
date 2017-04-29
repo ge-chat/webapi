@@ -13,7 +13,6 @@ using Geofy.Infrastructure.ServiceBus.MessageQueue;
 using Geofy.Infrastructure.ServiceBus.Messages;
 using Geofy.Infrastructure.ServiceBus.RabbitMq;
 using Geofy.Infrastructure.ServiceBus.RabbitMq.EventBus;
-using Geofy.ReadModels;
 using Geofy.ReadModels.Services.Chart;
 using Geofy.ReadModels.Services.Databases;
 using Geofy.ReadModels.Services.User;

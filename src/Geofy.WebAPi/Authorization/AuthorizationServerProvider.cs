@@ -4,19 +4,18 @@ using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Server;
 using Geofy.Services;
 using Geofy.Shared.Resources;
-using Microsoft.AspNet.Authentication;
-using Microsoft.AspNet.Authentication.OpenIdConnect;
-using Microsoft.AspNet.Http.Authentication;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Geofy.WebAPi.Authorization
 {
     public class AuthorizationServerProvider : OpenIdConnectServerProvider
     {
-        public override Task ValidateClientAuthentication(ValidateClientAuthenticationContext context)
+        public override Task GrantClientCredentials(GrantClientCredentialsContext context)
         {
-            //not validate client secret
-            context.Skipped();
+            context.Skip();
             return Task.CompletedTask;
         }
 
@@ -26,7 +25,7 @@ namespace Geofy.WebAPi.Authorization
             var user = await authenticationService.ValidateUser(context.UserName, context.Password);
             if (user == null)
             {
-                context.Rejected(MessageConstants.Errors.UserInvalidCredentials);
+                context.Reject(MessageConstants.Errors.UserInvalidCredentials);
                 return;
             }
 
@@ -39,7 +38,7 @@ namespace Geofy.WebAPi.Authorization
                 context.Options.AuthenticationScheme);
             ticket.SetResources(new [] { "http://192.168.55.2:5000/", "http://localhost:5000/" });
 
-            context.Validated(ticket);
+            context.Validate(ticket);
         }
     }
 }

@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using Geofy.Infrastructure.ServiceBus.Dispatching.Interfaces;
 using Geofy.Signals;
 using Geofy.WebAPi.SignalR.Hubs;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Infrastructure;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Infrastructure;
 
 namespace Geofy.WebAPi.SignalR.Handlers
 {

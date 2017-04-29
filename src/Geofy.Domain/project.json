@@ -2,11 +2,8 @@
   "version": "1.0.0-*",
   "description": "Geofy.Domain Class Library",
   "authors": [ "tarne" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
   "frameworks": {
-    "dnx46": { }
+    "net46": { }
   },
   "dependencies": {
     "Geofy.Domain.Commands": "1.0.0-*",

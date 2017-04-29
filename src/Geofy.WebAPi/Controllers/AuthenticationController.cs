@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Geofy.Domain.Commands.User;
+using Geofy.Infrastructure.ServiceBus.Interfaces;
 using Geofy.Services;
+using Geofy.Shared.Mongo;
 using Geofy.Shared.Resources;
 using Geofy.WebAPi.ViewModels.User;
 using Geofy.WebAPI.Services;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Geofy.WebAPi.Controllers
 {
@@ -13,7 +15,8 @@ namespace Geofy.WebAPi.Controllers
     {
         private readonly AuthenticationService _authenticationService;
 
-        public AuthenticationController(AuthenticationService authenticationService)
+        public AuthenticationController(AuthenticationService authenticationService, ICommandBus commandBus, IdGenerator idGenerator) 
+            : base(commandBus, idGenerator)
         {
             _authenticationService = authenticationService;
         }

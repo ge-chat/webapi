@@ -2,11 +2,8 @@
   "version": "1.0.0-*",
   "description": "Geofy.Services Class Library",
   "authors": [ "tarne" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
   "frameworks": {
-    "dnx46": { }
+    "net46": { }
   },
   "dependencies": {
     "Geofy.ReadModels": "1.0.0-*",

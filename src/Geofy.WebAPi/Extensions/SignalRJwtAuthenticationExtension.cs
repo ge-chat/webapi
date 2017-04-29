@@ -1,5 +1,5 @@
 ﻿using Geofy.WebAPi.Middlewares;
-using Microsoft.AspNet.Builder;
+using Microsoft.AspNetCore.Builder;
 
 namespace Geofy.WebAPi.Extensions
 {

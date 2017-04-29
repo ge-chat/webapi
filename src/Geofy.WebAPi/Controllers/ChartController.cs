@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Geofy.Domain.Commands.Chart;
+using Geofy.Infrastructure.ServiceBus.Interfaces;
 using Geofy.ReadModels;
 using Geofy.ReadModels.Services.Chart;
+using Geofy.Shared.Mongo;
 using Geofy.WebAPi.ViewModels.Chart;
 using Geofy.WebAPI.Services;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Geofy.WebAPi.Controllers
 {
@@ -17,7 +19,8 @@ namespace Geofy.WebAPi.Controllers
     {
         private readonly ChartReadModelService _chartReadModelService;
 
-        public ChartController(ChartReadModelService chartReadModelService)
+        public ChartController(ChartReadModelService chartReadModelService, ICommandBus commandBus, IdGenerator idGenerator) 
+            : base(commandBus, idGenerator)
         {
             _chartReadModelService = chartReadModelService;
         }

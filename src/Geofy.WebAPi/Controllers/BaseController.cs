@@ -3,21 +3,25 @@ using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Extensions;
 using Geofy.Infrastructure.ServiceBus.Interfaces;
 using Geofy.Shared.Mongo;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Geofy.WebAPi.Controllers
 {
     public class BaseController : Controller
     {
-        [FromServices]
-        public ICommandBus CommandBus { get; set; }
+        protected BaseController(ICommandBus commandBus, IdGenerator idGenerator)
+        {
+            CommandBus = commandBus;
+            IdGenerator = idGenerator;
+        }
 
-        [FromServices]
-        public IdGenerator IdGenerator { get; set; }
+        protected ICommandBus CommandBus { get; }
 
-        public string UserId => HttpContext.User.GetClaim(ClaimTypes.NameIdentifier);
+        protected IdGenerator IdGenerator { get; }
 
-        public Task SendAsync(params ICommand[] commands)
+        protected string UserId => HttpContext.User.GetClaim(ClaimTypes.NameIdentifier);
+
+        protected Task SendAsync(params ICommand[] commands)
         {
             foreach (var command in commands)
             {

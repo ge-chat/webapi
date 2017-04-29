@@ -1,9 +1,9 @@
 ﻿using System;
+using AspNet.Security.OpenIdConnect.Server;
 using Geofy.WebAPi.Authorization;
 using Geofy.WebAPi.Extensions;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.SignalR.Json;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -18,11 +18,12 @@ namespace Geofy.WebAPi
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json");
 
             builder.AddEnvironmentVariables();
-            _configuration = builder.Build().ReloadOnChanged("appsettings.json");
+            _configuration = builder.Build();
         }
 
         private readonly IConfigurationRoot _configuration;
@@ -34,11 +35,7 @@ namespace Geofy.WebAPi
                     options =>
                         options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
             services.AddAuthentication();
-            services.AddCaching();
             services.AddSignalR();
-            //services.AddSingleton(typeof(JsonSerializer),
-                //x => JsonSerializer.CreateDefault(new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver() }));
-                //x => null);
             return services.BuildContainer(_configuration);
         }
 
@@ -49,32 +46,29 @@ namespace Geofy.WebAPi
                 .AddDebug();
 
             app.UseSignalRJwtAuthentication()
-                .UseJwtBearerAuthentication(options =>
+                .UseJwtBearerAuthentication(new JwtBearerOptions
                 {
-                    options.AutomaticAuthenticate = true;
-                    options.AutomaticChallenge = true;
-                    options.RequireHttpsMetadata = false;
+                    AutomaticAuthenticate = true,
+                    AutomaticChallenge = true,
+                    RequireHttpsMetadata = false,
 
-                    options.Audience = "http://localhost:5000/";    
-                    options.Authority = "http://localhost:5000/";
+                    Audience = "http://localhost:5000/",    
+                    Authority = "http://localhost:5000/"
                 })
-                .UseOpenIdConnectServer(options =>
+                .UseOpenIdConnectServer(new OpenIdConnectServerOptions
                 {
-                    options.Provider = new AuthorizationServerProvider();
-                    options.AllowInsecureHttp = true;
-                    options.TokenEndpointPath = "/token";
-                    options.Issuer = new Uri("http://localhost:5000/");
+                    Provider = new AuthorizationServerProvider(),
+                    AllowInsecureHttp = true,
+                    TokenEndpointPath = "/token",
+                    Issuer = new Uri("http://localhost:5000/"),
 
                     //temp solution
-                    options.AccessTokenLifetime = TimeSpan.FromHours(24);
-                    options.RefreshTokenLifetime = TimeSpan.FromHours(24);
+                    AccessTokenLifetime = TimeSpan.FromHours(24),
+                    RefreshTokenLifetime = TimeSpan.FromHours(24),
                 })
                 .UseWebSockets()
                 .UseSignalR()
                 .UseMvc();
         }
-
-        // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }

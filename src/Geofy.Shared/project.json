@@ -2,11 +2,8 @@
   "version": "1.0.0-*",
   "description": "Geofy.Shared Class Library",
   "authors": [ "tarne" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
   "frameworks": {
-    "dnx46": { }
+    "net46": { }
   },
   "dependencies": {
     "Geofy.Infrastructure.ServiceBus": "1.0.0-*",

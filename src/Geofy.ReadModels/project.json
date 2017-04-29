@@ -2,11 +2,8 @@
   "version": "1.0.0-*",
   "description": "Geofy.ReadModels Class Library",
   "authors": [ "tarne" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
   "frameworks": {
-    "dnx46": { }
+    "net46": { }
   },
   "dependencies": {
     "MongoDB.Driver": "2.2.3"

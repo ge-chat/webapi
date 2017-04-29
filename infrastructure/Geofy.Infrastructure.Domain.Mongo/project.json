@@ -2,11 +2,8 @@
   "version": "1.0.0-*",
   "description": "Geofy.Infrastructure.Domain.Mongo Class Library",
   "authors": [ "tarne" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
   "frameworks": {
-    "dnx46": { }
+    "net46": { }
   },
   "dependencies": {
     "Geofy.Infrastructure.Domain": "1.0.0-*",
