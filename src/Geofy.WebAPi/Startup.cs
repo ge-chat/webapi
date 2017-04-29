@@ -6,6 +6,7 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.SignalR.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -17,12 +18,8 @@ namespace Geofy.WebAPi
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json");
-
-            if (env.IsEnvironment("Development"))
-            {
-                builder.AddJsonFile($"appsettings.{env.EnvironmentName}.json");
-            }
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json");
 
             builder.AddEnvironmentVariables();
             _configuration = builder.Build().ReloadOnChanged("appsettings.json");
@@ -39,6 +36,9 @@ namespace Geofy.WebAPi
             services.AddAuthentication();
             services.AddCaching();
             services.AddSignalR();
+            //services.AddSingleton(typeof(JsonSerializer),
+                //x => JsonSerializer.CreateDefault(new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver() }));
+                //x => null);
             return services.BuildContainer(_configuration);
         }
 

@@ -34,7 +34,7 @@ namespace Geofy.EventHandlers
                 Id = message.ChartId,
                 Title = message.Title,
                 Location = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
-                    new GeoJson2DGeographicCoordinates(message.Longitude, message.Latitude)),
+                    new GeoJson2DGeographicCoordinates(message.Latitude, message.Longitude)),
                 Radius = message.Radius,
                 Description = message.Description,
                 OwnerId = user.Id,

@@ -28,7 +28,7 @@ namespace Geofy.ReadModels.Services.Databases
 
         public Task<string> CreateIndexes()
         {
-            return Charts.Indexes.CreateOneAsync(Builders<ChartReadModel>.IndexKeys.Geo2DSphere(x => x.Description));
+            return Charts.Indexes.CreateOneAsync(Builders<ChartReadModel>.IndexKeys.Geo2DSphere(x => x.Location));
         }
     }
 }
