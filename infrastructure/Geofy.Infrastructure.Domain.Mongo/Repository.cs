@@ -5,7 +5,6 @@ using Geofy.Infrastructure.Domain.Interfaces;
 using Geofy.Infrastructure.Domain.Transitions;
 using Geofy.Infrastructure.Domain.Transitions.Interfaces;
 using Geofy.Infrastructure.Domain.Utilities;
-using Geofy.Infrastructure.ServiceBus.Dispatching;
 using Geofy.Infrastructure.ServiceBus.Interfaces;
 using MongoDB.Bson;
 using System.Linq;
@@ -23,7 +22,7 @@ namespace Geofy.Infrastructure.Domain.Mongo
             _eventBus = eventBus;
         }
 
-        public async Task Save(string aggregateId, Aggregate aggregate)
+        public async Task Save(string aggregateId, Aggregate aggregate, ICommandMetadata commandMetadata)
         {
             if (aggregateId == null)
                 throw new ArgumentException(
@@ -33,7 +32,7 @@ namespace Geofy.Infrastructure.Domain.Mongo
                 throw new ArgumentException(
                     $"Aggregate ID is empty string when trying to save {aggregate.GetType().FullName} aggregate. Please specify aggregate ID.");
 
-            var transition = CreateTransition(aggregateId, aggregate);
+            var transition = CreateTransition(aggregateId, aggregate, commandMetadata);
             await _transitionStorage.AppendTransition(transition);
             await _eventBus.PublishAsync(transition.Events.Select(e => (IEvent)e.Data).ToList());
         }
@@ -60,19 +59,19 @@ namespace Geofy.Infrastructure.Domain.Mongo
         /// Perform action on aggregate with specified id.
         /// Aggregate should be already created.
         /// </summary>
-        public async Task Perform<TAggregate>(String id, Action<TAggregate> action)
+        public async Task Perform<TAggregate>(String id, Action<TAggregate> action, ICommandMetadata commandMetadata)
             where TAggregate : Aggregate
         {
             var aggregate = await GetById<TAggregate>(id);
             action(aggregate);
-            await Save(id, aggregate);
+            await Save(id, aggregate, commandMetadata);
         }
 
         /// <summary>
         /// Create changeset. Used to persist changes in aggregate
         /// </summary>
         /// <returns></returns>
-        public Transition CreateTransition(String id, Aggregate aggregate)
+        public Transition CreateTransition(String id, Aggregate aggregate, ICommandMetadata commandMetadata)
         {
             if (string.IsNullOrEmpty(id))
                 throw new Exception(
@@ -86,13 +85,8 @@ namespace Geofy.Infrastructure.Domain.Mongo
                 e.Metadata.StoredDate = currentTime;
                 e.Metadata.TypeName = e.GetType().Name;
 
-                // Take some metadata properties from command
-                var command = Dispatcher.CurrentMessage as ICommand;
-                if (command?.Metadata != null)
-                {
-                    e.Metadata.CommandId = command.Metadata.CommandId;
-                    e.Metadata.UserId = command.Metadata.UserId;
-                }
+                e.Metadata.CommandId = commandMetadata.CommandId;
+                e.Metadata.UserId = commandMetadata.UserId;
 
                 transitionEvents.Add(new TransitionEvent(e.GetType().AssemblyQualifiedName, e));
             }
@@ -113,9 +107,9 @@ namespace Geofy.Infrastructure.Domain.Mongo
         {
         }
 
-        public async Task Save(String aggregateId, TAggregate aggregate)
+        public async Task Save(String aggregateId, TAggregate aggregate, ICommandMetadata commandMetadata)
         {
-            await base.Save(aggregateId, aggregate);
+            await base.Save(aggregateId, aggregate, commandMetadata);
         }
 
         public Task<TAggregate> GetById(String id)
@@ -123,9 +117,9 @@ namespace Geofy.Infrastructure.Domain.Mongo
             return GetById<TAggregate>(id);
         }
 
-        public Task Perform(string id, Action<TAggregate> action)
+        public Task Perform(string id, Action<TAggregate> action, ICommandMetadata commandMetadata)
         {
-            return Perform<TAggregate>(id, action);
+            return Perform<TAggregate>(id, action, commandMetadata);
         }
     }
 }

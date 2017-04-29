@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Geofy.ReadModels.Services
+namespace Geofy.ReadModels.Services.Base
 {
     public class PagedViewsResult<T> where T : new()
     {

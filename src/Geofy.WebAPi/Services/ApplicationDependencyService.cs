@@ -1,4 +1,6 @@
 ﻿using System;
+using Geofy.Domain.User;
+using Geofy.EventHandlers;
 using Geofy.Infrastructure.Domain.Interfaces;
 using Geofy.Infrastructure.Domain.Mongo;
 using Geofy.Infrastructure.Domain.Transitions.Interfaces;
@@ -12,6 +14,7 @@ using Geofy.Infrastructure.ServiceBus.Messages;
 using Geofy.Infrastructure.ServiceBus.RabbitMq;
 using Geofy.Infrastructure.ServiceBus.RabbitMq.EventBus;
 using Geofy.ReadModels.Services.Databases;
+using Geofy.Services;
 using Geofy.Shared.Logging;
 using Geofy.Shared.Mongo;
 using Geofy.WebAPI.DependencyInjection;
@@ -33,7 +36,8 @@ namespace Geofy.WebAPI.Services
             ConfigureMongoDb(container);
             ConfigureTransport(container);
             ConfigureEventStore(container);
-            
+            ConfigureOther(container);
+
             return container;
         }
 
@@ -99,8 +103,8 @@ namespace Geofy.WebAPI.Services
             var dispatcher = Dispatcher.Create(config =>
             {
                 config.SetServiceProvider(new StructureMapServiceProvider(container));
-                //TODO use real handlers assemply
-                config.AddHandlers(GetType().Assembly, new string[0]);
+                config.AddHandlers(typeof(UserAggregate).Assembly, new string[0]);
+                config.AddHandlers(typeof(UserEventHandler).Assembly, new string[0]);
                 config.SetMaxRetries(3); //retry to handle 3 times before fail
                 return config;
             }, container.GetInstance<ILogFactory>());
@@ -139,6 +143,16 @@ namespace Geofy.WebAPI.Services
                 config.For<RabbitMqClientsContainer<IEvent>>().Singleton().Use(eventsMqClientFactory);
                 config.For<IMessageBus>().Singleton().Use(messageBus);
                 config.For<RabbitMqClientsContainer<IMessage>>().Singleton().Use(messageMqClientFactory);
+            });
+        }
+
+        private static void ConfigureOther(IContainer container)
+        {
+            container.Configure(config =>
+            {
+                config.For<AuthenticationService>();
+                config.For<CryptographicHelper>();
+                config.For<IdGenerator >();
             });
         }
 

@@ -1,0 +1,16 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Geofy.Services Class Library",
+  "authors": [ "tarne" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "frameworks": {
+    "net46": { }
+  },
+  "dependencies": {
+    "Geofy.ReadModels": "1.0.0-*",
+    "Geofy.ReadModels.Services": "1.0.0-*",
+    "Geofy.Shared": "1.0.0-*"
+  }
+}

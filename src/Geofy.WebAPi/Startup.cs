@@ -6,6 +6,7 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
 using StructureMap;
 
 namespace Geofy.WebAPi
@@ -30,7 +31,11 @@ namespace Geofy.WebAPi
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(
+                    options =>
+                        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+
             var container = services.AddApplicationDependencies(_configuration);
             container.Populate(services);
 

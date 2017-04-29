@@ -21,6 +21,7 @@ namespace Geofy.EventHandlers
         {
             return _userMongoCollection.InsertOneAsync(new UserReadModel
             {
+                Id = message.UserId,
                 Email = message.Email,
                 PasswordSalt = message.PasswordSalt,
                 PasswordHash = message.PasswordHash,

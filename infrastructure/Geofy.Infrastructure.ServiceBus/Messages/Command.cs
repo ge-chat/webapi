@@ -11,22 +11,7 @@ namespace Geofy.Infrastructure.ServiceBus.Messages
         /// <summary>
         /// Command metadata
         /// </summary>
-        private ICommandMetadata _metadata = new CommandMetadata();
-
-        /// <summary>
-        /// ID of aggregate
-        /// </summary>
-        public string Id { get; set; }
-
-
-        /// <summary>
-        /// Command metadata
-        /// </summary>
-        public ICommandMetadata Metadata
-        {
-            get { return _metadata; }
-            set { _metadata = value; }
-        }
+        public ICommandMetadata Metadata { get; set; } = new CommandMetadata();
     }
 
     public class CommandMetadata : ICommandMetadata

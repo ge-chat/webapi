@@ -1,11 +1,12 @@
 using System;
 using System.Threading.Tasks;
+using Geofy.Infrastructure.ServiceBus.Interfaces;
 
 namespace Geofy.Infrastructure.Domain.Interfaces
 {
     public interface IRepository 
     {
-        Task Save(String aggregateId, Aggregate aggregate);
+        Task Save(String aggregateId, Aggregate aggregate, ICommandMetadata commandMetadata);
 
         /// <summary>
         /// Generic version
@@ -17,13 +18,13 @@ namespace Geofy.Infrastructure.Domain.Interfaces
         /// Perform action on aggregate with specified id.
         /// Aggregate should be already created.
         /// </summary>
-        Task Perform<TAggregate>(String id, Action<TAggregate> action)
+        Task Perform<TAggregate>(String id, Action<TAggregate> action, ICommandMetadata commandMetadata)
             where TAggregate : Aggregate;
     }
 
     public interface IRepository<TAggregate> where TAggregate : Aggregate
     {
-        Task Save(String aggregateId, TAggregate aggregate);
+        Task Save(String aggregateId, TAggregate aggregate, ICommandMetadata commandMetadata);
 
         /// <summary>
         /// Generic version
@@ -34,6 +35,6 @@ namespace Geofy.Infrastructure.Domain.Interfaces
         /// Perform action on aggregate with specified id.
         /// Aggregate should be already created.
         /// </summary>
-        Task Perform(String id, Action<TAggregate> action);
+        Task Perform(String id, Action<TAggregate> action, ICommandMetadata commandMetadata);
     }
 }

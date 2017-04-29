@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Geofy.ReadModels.Services
+namespace Geofy.ReadModels.Services.Base
 {
     public class BaseFilter
     {

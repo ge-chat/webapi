@@ -55,9 +55,9 @@ namespace Geofy.Infrastructure.Domain
 
         public void Apply(IEvent evnt)
         {
-            if (String.IsNullOrEmpty(evnt.Id))
-                throw new Exception(
-                    $"Event {evnt.GetType().FullName} has null (or empty) ID property. Make sure you specify it on event creation");
+            //if (String.IsNullOrEmpty(evnt.Metadata.EventId))
+            //    throw new Exception(
+            //        $"Event {evnt.GetType().FullName} has null (or empty) ID property. Make sure you specify it on event creation");
 
             StateSpooler.Spool((AggregateState)_state, evnt);
             _changes.Add(evnt);

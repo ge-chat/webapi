@@ -28,13 +28,6 @@ namespace Geofy.Infrastructure.ServiceBus.Dispatching
         /// </summary>
         private readonly int _maxRetries;
 
-
-        /// <summary>
-        /// Current message that is dispatched 
-        /// </summary>
-        [ThreadStatic]
-        public static Object CurrentMessage;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
@@ -74,8 +67,6 @@ namespace Geofy.Infrastructure.ServiceBus.Dispatching
         {
             try
             {
-                CurrentMessage = message;
-
                 var subscriptions = _registry.GetSubscriptions(message.GetType());
 
                 foreach (var subscription in subscriptions)

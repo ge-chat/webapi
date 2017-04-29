@@ -17,7 +17,7 @@ namespace Geofy.Domain.User
 
         public async Task HandleAsync(RegisterUser message)
         {
-            await _repository.Perform(message.UserId, agr => agr.RegisterUser(message));
+            await _repository.Perform(message.UserId, agr => agr.RegisterUser(message), message.Metadata);
         }
     }
 }

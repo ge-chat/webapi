@@ -5,8 +5,6 @@ namespace Geofy.Infrastructure.ServiceBus.Interfaces
     /// </summary>
     public interface IEvent
     {
-        string Id { get; set; }
-
         IEventMetadata Metadata { get; set; }
     }
 }

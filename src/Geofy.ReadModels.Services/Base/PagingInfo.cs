@@ -1,4 +1,4 @@
-﻿namespace Geofy.ReadModels.Services
+﻿namespace Geofy.ReadModels.Services.Base
 {
     public class PagingInfo
     {

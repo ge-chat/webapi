@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using System.Linq;
 
-namespace Geofy.ReadModels.Services
+namespace Geofy.ReadModels.Services.Base
 {
     public abstract class BaseReadModelServicece<T, TFilter>
         where TFilter : BaseFilter, new()
@@ -55,7 +55,7 @@ namespace Geofy.ReadModels.Services
             return list;
         }
 
-        private IFindFluent<T, T> GetCursorByFilter(TFilter filter)
+        protected IFindFluent<T, T> GetCursorByFilter(TFilter filter)
         {
             var filterBuilder = Builders<T>.Filter;
 

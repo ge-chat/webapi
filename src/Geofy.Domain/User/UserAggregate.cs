@@ -10,7 +10,7 @@ namespace Geofy.Domain.User
         {
             Apply(new UserCreated
             {
-                UserId = State.Id,
+                UserId = cmd.UserId,
                 Email = cmd.Email,
                 PasswordHash = cmd.PasswordHash,
                 PasswordSalt = cmd.PasswordSalt,
