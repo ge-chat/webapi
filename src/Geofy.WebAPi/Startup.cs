@@ -36,6 +36,7 @@ namespace Geofy.WebAPi
                         options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
             services.AddAuthentication();
             services.AddCaching();
+            services.AddSignalR();
             return services.BuildContainer(_configuration);
         }
 
@@ -44,25 +45,27 @@ namespace Geofy.WebAPi
 
             loggerFactory.AddConsole(_configuration.GetSection("Logging"))
                 .AddDebug();
+            app.UseSignalRJwtAuthentication()
+                .UseJwtBearerAuthentication(options =>
+                {
+                    options.AutomaticAuthenticate = true;
+                    options.AutomaticChallenge = true;
+                    options.RequireHttpsMetadata = false;
 
-            
-            app.UseJwtBearerAuthentication(options =>
-            {
-                options.AutomaticAuthenticate = true;
-                options.AutomaticChallenge = true;
-                options.RequireHttpsMetadata = false;
+                    options.Audience = "http://localhost:5000/";
+                    options.Authority = "http://localhost:5000/";
+                })
+                .UseOpenIdConnectServer(options =>
+                {
+                    options.Provider = new AuthorizationServerProvider();
+                    options.AllowInsecureHttp = true;
+                    options.TokenEndpointPath = "/token";
 
-                options.Audience = "http://localhost:5000/";
-                options.Authority = "http://localhost:5000/";
-            }).UseOpenIdConnectServer(options =>
-            {
-                options.Provider = new AuthorizationServerProvider();
-                options.AllowInsecureHttp = true;
-                options.TokenEndpointPath = "/token";
-
-                options.AccessTokenLifetime = TimeSpan.FromMinutes(20);
-                options.RefreshTokenLifetime = TimeSpan.FromHours(24);
-            }).UseMvc();
+                    options.AccessTokenLifetime = TimeSpan.FromMinutes(20);
+                    options.RefreshTokenLifetime = TimeSpan.FromHours(24);
+                })
+                .UseSignalR()
+                .UseMvc();
         }
 
 

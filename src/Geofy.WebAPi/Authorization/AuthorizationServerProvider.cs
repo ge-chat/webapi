@@ -14,7 +14,7 @@ namespace Geofy.WebAPi.Authorization
         public override Task ValidateClientAuthentication(ValidateClientAuthenticationContext context)
         {
             //not validate client secret
-            context.Validated();
+            context.Skipped();
             return Task.CompletedTask;
         }
 
