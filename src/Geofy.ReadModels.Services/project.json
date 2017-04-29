@@ -1,0 +1,14 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Geofy.ReadModels.Services Class Library",
+  "authors": [ "tarne" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "frameworks": {
+    "net46": { }
+  },
+  "dependencies": {
+    "Geofy.ReadModels": "1.0.0-*"
+  }
+}

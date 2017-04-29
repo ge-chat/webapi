@@ -9,25 +9,14 @@ namespace Geofy.Infrastructure.ServiceBus.Messages
     public abstract class Event : IEvent
     {
         /// <summary>
-        /// Metadata of event
-        /// </summary>
-        private IEventMetadata _metadata = new EventMetadata();
-
-        /// <summary>
         /// ID of aggregate
         /// </summary>
         public string Id { get; set; }
 
-        public string TenantId { get; set; }
-
         /// <summary>
         /// Metadata of event
         /// </summary>
-        public IEventMetadata Metadata
-        {
-            get { return _metadata; }
-            set { _metadata = value; }
-        }
+        public IEventMetadata Metadata { get; set; } = new EventMetadata();
     }
 
     /// <summary>

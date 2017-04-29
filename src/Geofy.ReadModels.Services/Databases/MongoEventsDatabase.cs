@@ -1,4 +1,4 @@
-﻿namespace Geofy.ReadModels.Databases
+﻿namespace Geofy.ReadModels.Services.Databases
 {
     public class MongoEventsDatabase
     {

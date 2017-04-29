@@ -11,7 +11,7 @@ using Geofy.Infrastructure.ServiceBus.MessageQueue;
 using Geofy.Infrastructure.ServiceBus.Messages;
 using Geofy.Infrastructure.ServiceBus.RabbitMq;
 using Geofy.Infrastructure.ServiceBus.RabbitMq.EventBus;
-using Geofy.ReadModels.Databases;
+using Geofy.ReadModels.Services.Databases;
 using Geofy.Shared.Logging;
 using Geofy.Shared.Mongo;
 using Geofy.WebAPI.DependencyInjection;

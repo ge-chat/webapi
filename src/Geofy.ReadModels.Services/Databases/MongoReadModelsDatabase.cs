@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 
-namespace Geofy.ReadModels.Databases
+namespace Geofy.ReadModels.Services.Databases
 {
     public class MongoReadModelsDatabase
     {
@@ -20,5 +20,7 @@ namespace Geofy.ReadModels.Databases
         {
             return Database.GetCollection<TDocument>(collectionName);
         }
+
+        public IMongoCollection<UserReadModel> Users => GetCollection<UserReadModel>("users");
     }
 }

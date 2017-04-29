@@ -10,6 +10,7 @@
     "Geofy.Infrastructure.ServiceBus": "1.0.0-*",
     "Geofy.Infrastructure.ServiceBus.RabbitMq": "1.0.0-*",
     "Geofy.ReadModels": "1.0.0-*",
+    "Geofy.ReadModels.Services": "1.0.0-*",
     "Geofy.Shared": "1.0.0-*",
     "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
     "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",

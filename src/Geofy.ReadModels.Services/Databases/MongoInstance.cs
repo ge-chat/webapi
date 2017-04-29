@@ -1,7 +1,7 @@
 ﻿using System;
 using MongoDB.Driver;
 
-namespace Geofy.ReadModels.Databases
+namespace Geofy.ReadModels.Services.Databases
 {
     public class MongoInstance
     {

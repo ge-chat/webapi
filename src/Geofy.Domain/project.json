@@ -1,0 +1,17 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Geofy.Domain Class Library",
+  "authors": [ "tarne" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "frameworks": {
+    "net46": { }
+  },
+  "dependencies": {
+    "Geofy.Domain.Commands": "1.0.0-*",
+    "Geofy.Domain.Events": "1.0.0-*",
+    "Geofy.Infrastructure.Domain": "1.0.0-*",
+    "Geofy.Infrastructure.ServiceBus": "1.0.0-*"
+  }
+}
