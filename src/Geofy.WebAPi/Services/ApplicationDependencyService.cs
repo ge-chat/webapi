@@ -13,7 +13,10 @@ using Geofy.Infrastructure.ServiceBus.MessageQueue;
 using Geofy.Infrastructure.ServiceBus.Messages;
 using Geofy.Infrastructure.ServiceBus.RabbitMq;
 using Geofy.Infrastructure.ServiceBus.RabbitMq.EventBus;
+using Geofy.ReadModels;
+using Geofy.ReadModels.Services.Chart;
 using Geofy.ReadModels.Services.Databases;
+using Geofy.ReadModels.Services.User;
 using Geofy.Services;
 using Geofy.Shared.Logging;
 using Geofy.Shared.Mongo;
@@ -154,7 +157,10 @@ namespace Geofy.WebAPI.Services
             {
                 config.For<AuthenticationService>();
                 config.For<CryptographicHelper>();
-                config.For<IdGenerator >();
+                config.For<IdGenerator>();
+
+                config.For<UserReadModelService>();
+                config.For<ChartReadModelService>();
             });
         }
 

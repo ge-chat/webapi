@@ -9,7 +9,7 @@ namespace Geofy.ReadModels.Services.Base
         where TFilter : BaseFilter, new()
         where T : new()
     {
-        private readonly IMongoCollection<T> _items;
+        protected readonly IMongoCollection<T> _items;
 
         protected BaseReadModelServicece(IMongoCollection<T> items)
         {

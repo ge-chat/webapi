@@ -46,7 +46,7 @@ namespace Geofy.EventHandlers
             {
                 ChartId = chart.Id,
                 Title = chart.Title,
-                Location =  new Location
+                Location = new Location
                 {
                     Latitude = chart.Location.Coordinates.Latitude,
                     Longitude = chart.Location.Coordinates.Longitude
