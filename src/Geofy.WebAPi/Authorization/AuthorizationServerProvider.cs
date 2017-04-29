@@ -4,7 +4,9 @@ using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Server;
 using Geofy.Services;
 using Geofy.Shared.Resources;
+using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
+using Microsoft.AspNet.Http.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Geofy.WebAPi.Authorization
@@ -29,10 +31,15 @@ namespace Geofy.WebAPi.Authorization
             }
 
             var identity = new ClaimsIdentity(OpenIdConnectDefaults.AuthenticationScheme);
-            identity.AddClaim(ClaimTypes.NameIdentifier, user.Id);
-            identity.AddClaim(ClaimTypes.Name, user.UserName);
-            identity.AddClaim(ClaimTypes.Email, user.Email);
-            context.Validated(new ClaimsPrincipal(identity));
+            identity.AddClaim(ClaimTypes.NameIdentifier, user.Id, "token");
+            identity.AddClaim(ClaimTypes.Name, user.Email, "token");
+
+            var ticket = new AuthenticationTicket(new ClaimsPrincipal(identity),
+                new AuthenticationProperties(),
+                context.Options.AuthenticationScheme);
+            ticket.SetResources(new [] { "http://192.168.55.2:5000/", "http://localhost:5000/" });
+
+            context.Validated(ticket);
         }
     }
 }

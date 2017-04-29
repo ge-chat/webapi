@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using AspNet.Security.OpenIdConnect.Extensions;
 using Geofy.Infrastructure.ServiceBus.Interfaces;
 using Geofy.Shared.Mongo;
 using Microsoft.AspNet.Mvc;
@@ -13,7 +15,7 @@ namespace Geofy.WebAPi.Controllers
         [FromServices]
         public IdGenerator IdGenerator { get; set; }
 
-        public string UserId => null;
+        public string UserId => HttpContext.User.GetClaim(ClaimTypes.NameIdentifier);
 
         public Task SendAsync(params ICommand[] commands)
         {

@@ -45,6 +45,7 @@ namespace Geofy.WebAPi
 
             loggerFactory.AddConsole(_configuration.GetSection("Logging"))
                 .AddDebug();
+
             app.UseSignalRJwtAuthentication()
                 .UseJwtBearerAuthentication(options =>
                 {
@@ -60,15 +61,15 @@ namespace Geofy.WebAPi
                     options.Provider = new AuthorizationServerProvider();
                     options.AllowInsecureHttp = true;
                     options.TokenEndpointPath = "/token";
+                    options.Issuer = new Uri("http://localhost:5000/");
 
                     options.AccessTokenLifetime = TimeSpan.FromMinutes(20);
                     options.RefreshTokenLifetime = TimeSpan.FromHours(24);
                 })
+                .UseWebSockets()
                 .UseSignalR()
                 .UseMvc();
         }
-
-
 
         // Entry point for the application.
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
