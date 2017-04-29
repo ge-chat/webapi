@@ -65,7 +65,7 @@ namespace Geofy.WebAPi
                     //temp solution
                     AccessTokenLifetime = TimeSpan.FromHours(24),
                     RefreshTokenLifetime = TimeSpan.FromHours(24),
-                })
+                }.UseJwtTokens())
                 .UseWebSockets()
                 .UseSignalR()
                 .UseMvc();

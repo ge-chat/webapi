@@ -13,8 +13,9 @@ namespace Geofy.WebAPi.Authorization
 {
     public class AuthorizationServerProvider : OpenIdConnectServerProvider
     {
-        public override Task GrantClientCredentials(GrantClientCredentialsContext context)
+        public override Task ValidateTokenRequest(ValidateTokenRequestContext context)
         {
+            //not validate client secret
             context.Skip();
             return Task.CompletedTask;
         }
