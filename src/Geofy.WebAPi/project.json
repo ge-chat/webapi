@@ -38,5 +38,13 @@
 
   "frameworks": {
     "net46": { }
+  },
+
+  "publishOptions": {
+    "include": [
+      "appsettings.json",
+      "appsettings.Development.json",
+      "appsettings.Production.json"
+    ]
   }
 }
