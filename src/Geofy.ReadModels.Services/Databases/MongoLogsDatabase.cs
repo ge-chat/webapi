@@ -16,9 +16,5 @@ namespace Geofy.ReadModels.Services.Databases
         /// Get database
         /// </summary>
         public IMongoDatabase Database => _mongo.Client.GetDatabase(_mongo.DefaultDatabase);
-
-        //public MongoCollection Logs => Database.GetCollection("logs");
-
-        //public MongoCollection AppLogs => Database.GetCollection("app_logs");
     }
 }

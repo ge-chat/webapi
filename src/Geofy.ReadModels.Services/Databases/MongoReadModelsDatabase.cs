@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using System.Threading.Tasks;
+using MongoDB.Driver;
 
 namespace Geofy.ReadModels.Services.Databases
 {
@@ -9,6 +10,7 @@ namespace Geofy.ReadModels.Services.Databases
         public MongoReadModelsDatabase(string connectionString, bool authenticateToAdmin)
         {
             _mongo = new MongoInstance(connectionString, authenticateToAdmin);
+            CreateIndexes().Wait();
         }
 
         /// <summary>
@@ -23,5 +25,10 @@ namespace Geofy.ReadModels.Services.Databases
 
         public IMongoCollection<UserReadModel> Users => GetCollection<UserReadModel>("users");
         public IMongoCollection<ChartReadModel> Charts => GetCollection<ChartReadModel>("charts");
+
+        public Task<string> CreateIndexes()
+        {
+            return Charts.Indexes.CreateOneAsync(Builders<ChartReadModel>.IndexKeys.Geo2DSphere(x => x.Description));
+        }
     }
 }

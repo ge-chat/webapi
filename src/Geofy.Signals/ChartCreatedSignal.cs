@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Geofy.Infrastructure.ServiceBus.Messages;
 using Geofy.ReadModels;
+using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace Geofy.Signals
 {

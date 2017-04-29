@@ -7,6 +7,7 @@ using Geofy.ReadModels.Services.Databases;
 using Geofy.ReadModels.Services.User;
 using Geofy.Signals;
 using MongoDB.Driver;
+using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace Geofy.EventHandlers
 {
@@ -32,11 +33,8 @@ namespace Geofy.EventHandlers
             {
                 Id = message.ChartId,
                 Title = message.Title,
-                Location = new Location
-                {
-                    Latitude = message.Latitude,
-                    Longitude = message.Longitude
-                },
+                Location = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
+                    new GeoJson2DGeographicCoordinates(message.Longitude, message.Latitude)),
                 Radius = message.Radius,
                 Description = message.Description,
                 OwnerId = user.Id,
@@ -48,7 +46,11 @@ namespace Geofy.EventHandlers
             {
                 ChartId = chart.Id,
                 Title = chart.Title,
-                Location = chart.Location,
+                Location =  new Location
+                {
+                    Latitude = chart.Location.Coordinates.Latitude,
+                    Longitude = chart.Location.Coordinates.Longitude
+                },
                 Radius = chart.Radius,
                 Description = chart.Description,
                 OwnerId = chart.OwnerId,

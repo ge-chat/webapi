@@ -3,6 +3,7 @@ using Geofy.Infrastructure.ServiceBus.Dispatching.Interfaces;
 using Geofy.ReadModels;
 using Geofy.Signals;
 using Geofy.WebAPi.SignalR.Hubs;
+using Geofy.WebAPi.ViewModels.Chart;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 
@@ -20,7 +21,7 @@ namespace Geofy.WebAPi.SignalR.Handlers
 
         public Task HandleAsync(ChartCreatedSignal message)
         {
-            _chartHub.Clients.Group(message.Metadata.UserId).chartCreated(new ChartReadModel
+            _chartHub.Clients.Group(message.Metadata.UserId).chartCreated(new ChartViewModel
             {
                 Id = message.ChartId,
                 Title = message.Title,
