@@ -7,7 +7,7 @@ namespace Geofy.Infrastructure.ServiceBus.Interfaces
     /// </summary>
     public interface IMessageBus
     {
-        Task SendInMemoryTask(params IMessage[] messages);
+        Task SendInMemoryAsync(params IMessage[] messages);
         Task SendRealTimeMessageAsync(params IMessage[] messages);
         Task SendLongTaskAsync(params IMessage[] messages);
     }

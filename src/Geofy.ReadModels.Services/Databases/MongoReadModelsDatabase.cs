@@ -12,15 +12,16 @@ namespace Geofy.ReadModels.Services.Databases
         }
 
         /// <summary>
-        ///     Get database
+        /// Get database
         /// </summary>
-        public IMongoDatabase Database => _mongo.Client.GetDatabase(_mongo.DefaultDatabase);
+        private IMongoDatabase Database => _mongo.Client.GetDatabase(_mongo.DefaultDatabase);
 
-        protected IMongoCollection<TDocument> GetCollection<TDocument>(string collectionName)
+        private IMongoCollection<TDocument> GetCollection<TDocument>(string collectionName)
         {
             return Database.GetCollection<TDocument>(collectionName);
         }
 
         public IMongoCollection<UserReadModel> Users => GetCollection<UserReadModel>("users");
+        public IMongoCollection<ChartReadModel> Charts => GetCollection<ChartReadModel>("charts");
     }
 }

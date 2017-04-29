@@ -3,9 +3,11 @@ using Geofy.WebAPi.Authorization;
 using Geofy.WebAPi.Extensions;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.SignalR.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace Geofy.WebAPi
@@ -53,7 +55,7 @@ namespace Geofy.WebAPi
                     options.AutomaticChallenge = true;
                     options.RequireHttpsMetadata = false;
 
-                    options.Audience = "http://localhost:5000/";
+                    options.Audience = "http://localhost:5000/";    
                     options.Authority = "http://localhost:5000/";
                 })
                 .UseOpenIdConnectServer(options =>
@@ -63,7 +65,8 @@ namespace Geofy.WebAPi
                     options.TokenEndpointPath = "/token";
                     options.Issuer = new Uri("http://localhost:5000/");
 
-                    options.AccessTokenLifetime = TimeSpan.FromMinutes(20);
+                    //temp solution
+                    options.AccessTokenLifetime = TimeSpan.FromHours(24);
                     options.RefreshTokenLifetime = TimeSpan.FromHours(24);
                 })
                 .UseWebSockets()

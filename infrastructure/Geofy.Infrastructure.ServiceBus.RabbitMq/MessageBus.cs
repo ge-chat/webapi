@@ -18,7 +18,7 @@ namespace Geofy.Infrastructure.ServiceBus.RabbitMq
             _dispatcher = dispatcher;
         }
 
-        public async Task SendInMemoryTask(params IMessage[] messages)
+        public async Task SendInMemoryAsync(params IMessage[] messages)
         {
             if (messages.Length == 0)
                 throw new ArgumentException("messages");

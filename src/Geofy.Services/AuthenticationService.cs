@@ -40,16 +40,5 @@ namespace Geofy.Services
         {
             return _cryptographicHelper.GetPasswordHash(password, salt);
         }
-
-        public string GetToken(UserReadModel user)
-        {
-            return user.Id;
-        }
-
-        public async Task<bool> ValidateToken(string token)
-        {
-            var user = await _userReadModelService.GetByIdAsync(token);
-            return user != null;
-        }
     }
 }

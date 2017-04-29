@@ -1,6 +1,6 @@
-{
+﻿{
   "version": "1.0.0-*",
-  "description": "Geofy.EventHandlers Class Library",
+  "description": "Geofy.Signals Class Library",
   "authors": [ "tarne" ],
   "tags": [ "" ],
   "projectUrl": "",
@@ -9,10 +9,7 @@
     "dnx46": { }
   },
   "dependencies": {
-    "Geofy.Domain.Events": "1.0.0-*",
     "Geofy.Infrastructure.ServiceBus": "1.0.0-*",
-    "Geofy.ReadModels": "1.0.0-*",
-    "Geofy.ReadModels.Services": "1.0.0-*",
-    "Geofy.Signals": "1.0.0-*"
+    "Geofy.ReadModels": "1.0.0-*"
   }
 }

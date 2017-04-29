@@ -38,21 +38,7 @@ namespace Geofy.WebAPi.Controllers
                 UserName = model.UserName
             });
 
-            return new HttpOkResult();
-        }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody]LoginViewModel model)
-        {
-            var user = await _authenticationService.ValidateUser(model.Email, model.Password);
-            if (user == null)
-            {
-                ModelState.AddModelError("", MessageConstants.Errors.UserInvalidCredentials);
-            }
-            if (!ModelState.IsValid) return new GeofyBadRequest(ModelState);
-            return new HttpOkObjectResult(new {
-                token = _authenticationService.GetToken(user)}
-            );
+            return Ok();
         }
     }
 }

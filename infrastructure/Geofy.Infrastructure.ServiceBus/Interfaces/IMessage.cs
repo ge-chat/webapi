@@ -2,10 +2,6 @@
 {
     public interface IMessage
     {
-        string Id { get; set; }
-
-        string TenantId { get; set; }
-
         MessageMetadata Metadata { get; set; }
     }
 

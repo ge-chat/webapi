@@ -17,6 +17,7 @@ using Geofy.ReadModels.Services.Databases;
 using Geofy.Services;
 using Geofy.Shared.Logging;
 using Geofy.Shared.Mongo;
+using Geofy.WebAPi.SignalR.Handlers;
 using Geofy.WebAPI.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson.Serialization;
@@ -105,6 +106,7 @@ namespace Geofy.WebAPI.Services
                 config.SetServiceProvider(new StructureMapServiceProvider(container));
                 config.AddHandlers(typeof(UserAggregate).Assembly, new string[0]);
                 config.AddHandlers(typeof(UserEventHandler).Assembly, new string[0]);
+                config.AddHandlers(typeof(ChartSignalHandler).Assembly, new string[0]);
                 config.SetMaxRetries(3); //retry to handle 3 times before fail
                 return config;
             }, container.GetInstance<ILogFactory>());
