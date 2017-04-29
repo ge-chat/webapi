@@ -1,13 +1,12 @@
 ﻿using System;
+using Geofy.WebAPi.Authorization;
 using Geofy.WebAPi.Extensions;
-using Geofy.WebAPI.DependencyInjection;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
-using StructureMap;
 
 namespace Geofy.WebAPi
 {
@@ -35,11 +34,9 @@ namespace Geofy.WebAPi
                 .AddJsonOptions(
                     options =>
                         options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
-
-            var container = services.AddApplicationDependencies(_configuration);
-            container.Populate(services);
-
-            return new StructureMapServiceProvider(container);
+            services.AddAuthentication();
+            services.AddCaching();
+            return services.BuildContainer(_configuration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -48,8 +45,27 @@ namespace Geofy.WebAPi
             loggerFactory.AddConsole(_configuration.GetSection("Logging"))
                 .AddDebug();
 
-            app.UseMvc();
+            
+            app.UseJwtBearerAuthentication(options =>
+            {
+                options.AutomaticAuthenticate = true;
+                options.AutomaticChallenge = true;
+                options.RequireHttpsMetadata = false;
+
+                options.Audience = "http://localhost:5000/";
+                options.Authority = "http://localhost:5000/";
+            }).UseOpenIdConnectServer(options =>
+            {
+                options.Provider = new AuthorizationServerProvider();
+                options.AllowInsecureHttp = true;
+                options.TokenEndpointPath = "/token";
+
+                options.AccessTokenLifetime = TimeSpan.FromMinutes(20);
+                options.RefreshTokenLifetime = TimeSpan.FromHours(24);
+            }).UseMvc();
         }
+
+
 
         // Entry point for the application.
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);

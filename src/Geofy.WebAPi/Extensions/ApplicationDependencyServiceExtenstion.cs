@@ -1,6 +1,8 @@
-﻿using Geofy.Infrastructure.ServiceBus.Dispatching.Interfaces;
+﻿using System;
+using Geofy.Infrastructure.ServiceBus.Dispatching.Interfaces;
 using Geofy.Infrastructure.ServiceBus.Interfaces;
 using Geofy.Infrastructure.ServiceBus.RabbitMq;
+using Geofy.WebAPI.DependencyInjection;
 using Geofy.WebAPI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +42,14 @@ namespace Geofy.WebAPi.Extensions
             }
 
             return container;
+        }
+
+        public static IServiceProvider BuildContainer(this IServiceCollection services, IConfiguration configuration)
+        {
+            var container = services.AddApplicationDependencies(configuration);
+            container.Populate(services);
+
+            return new StructureMapServiceProvider(container);
         }
     }
 }
