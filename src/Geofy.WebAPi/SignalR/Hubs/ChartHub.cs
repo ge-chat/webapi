@@ -1,28 +1,44 @@
-﻿using System.Security.Claims;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using AspNet.Security.OpenIdConnect.Extensions;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Geofy.WebAPi.SignalR.Hubs
 {
     public class ChartHub : Hub
     {
+        private const string CHAT_KEY_PARAM = "chatId";
+
         public override Task OnConnected()
         {
-            var identity = (ClaimsIdentity) Context.User.Identity;
-            var groupId = identity.GetClaim(ClaimTypes.NameIdentifier);
-            return !string.IsNullOrEmpty(groupId)
-                ? Groups.Add(Context.ConnectionId, groupId)
+            var chartId = Context.QueryString[CHAT_KEY_PARAM].FirstOrDefault();
+            return !string.IsNullOrEmpty(chartId)
+                ? Groups.Add(Context.ConnectionId, chartId)
                 : Task.CompletedTask;
         }
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            var identity = (ClaimsIdentity)Context.User.Identity;
-            var groupId = identity.GetClaim(ClaimTypes.NameIdentifier);
-            return !string.IsNullOrEmpty(groupId) 
-                ? Groups.Remove(Context.ConnectionId, groupId) :
+            var chartId = Context.QueryString[CHAT_KEY_PARAM].FirstOrDefault();
+            return !string.IsNullOrEmpty(chartId) 
+                ? Groups.Remove(Context.ConnectionId, chartId) :
                 Task.CompletedTask;
+        }
+
+        public async Task connectToChat(string connectionId, IEnumerable<string> chartIds)
+        {
+            foreach (var chartId in chartIds)
+            {
+                await Groups.Add(connectionId, chartId);
+            }
+        }
+
+        public async Task disconnectFromChat(string connectionId, IEnumerable<string> chartIds)
+        {
+            foreach (var chartId in chartIds)
+            {
+                await Groups.Remove(connectionId, chartId);
+            }
         }
     }
 }

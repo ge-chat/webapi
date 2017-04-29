@@ -14,31 +14,33 @@ namespace Geofy.WebAPi.SignalR.Handlers
         IMessageHandlerAsync<ParticipantAddedSignal>
     {
         private readonly IHubContext _chartHub;
+        private readonly IHubContext _userHub;
 
         public ChartSignalHandler(IConnectionManager manager)
         {
+            _userHub = manager.GetHubContext<UserHub>();
             _chartHub = manager.GetHubContext<ChartHub>();
         }
 
         public Task HandleAsync(ChartCreatedSignal message)
         {
-            _chartHub.Clients.Group(message.Metadata.UserId).chartCreated(Map(message));
+            _userHub.Clients.Group(message.Metadata.UserId).chartCreated(Map(message));
             return Task.CompletedTask;
         }
 
         public Task HandleAsync(MessagePostedSignal message)
         {
-            _chartHub.Clients.Group(message.Metadata.UserId).messagePosted(Map(message));
+            _chartHub.Clients.Group(message.ChartId).messagePosted(Map(message));
             return Task.CompletedTask;
         }
 
         public Task HandleAsync(ParticipantAddedSignal message)
         {
-            _chartHub.Clients.Group(message.Metadata.UserId).participantAdded(Map(message));
+            _chartHub.Clients.Group(message.ChartId).participantAdded(Map(message));
             return Task.CompletedTask;
         }
 
-        //Convert to camelcase due to SignalR configuration mismatch
+        #region Convert to camelcase due to SignalR configuration mismatch
         private object Map(ParticipantAddedSignal message)
         {
             return new
@@ -83,5 +85,6 @@ namespace Geofy.WebAPi.SignalR.Handlers
                 userId = message.UserId
             };
         }
+        #endregion
     }
 }
