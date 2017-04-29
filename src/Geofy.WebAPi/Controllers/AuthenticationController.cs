@@ -3,6 +3,7 @@ using Geofy.Domain.Commands.User;
 using Geofy.Services;
 using Geofy.Shared.Resources;
 using Geofy.WebAPi.ViewModels.User;
+using Geofy.WebAPI.Services;
 using Microsoft.AspNet.Mvc;
 
 namespace Geofy.WebAPi.Controllers
@@ -23,9 +24,9 @@ namespace Geofy.WebAPi.Controllers
             var userExists = await _authenticationService.UserExists(model.Email);
             if (userExists)
             {
-                ModelState.AddModelError(MessageConstants.Errors.UserAlreadyRegistred, "");
+                ModelState.AddModelError("", MessageConstants.Errors.UserAlreadyRegistred);
             }
-            if(!ModelState.IsValid) return new BadRequestObjectResult(ModelState);
+            if(!ModelState.IsValid) return new GeofyBadRequest(ModelState);
 
             var salt = _authenticationService.GenerateSalt();
             await CommandBus.SendAsync(new RegisterUser
@@ -46,9 +47,9 @@ namespace Geofy.WebAPi.Controllers
             var user = await _authenticationService.ValidateUser(model.Email, model.Password);
             if (user == null)
             {
-                ModelState.AddModelError(MessageConstants.Errors.UserInvalidCredentials, "");
+                ModelState.AddModelError("", MessageConstants.Errors.UserInvalidCredentials);
             }
-            if (!ModelState.IsValid) return new BadRequestObjectResult(ModelState);
+            if (!ModelState.IsValid) return new GeofyBadRequest(ModelState);
             return new HttpOkObjectResult(_authenticationService.GetToken(user));
         }
     }
