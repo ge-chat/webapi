@@ -23,14 +23,16 @@ namespace Geofy.Infrastructure.ServiceBus.RabbitMq
                 await _dispatcher.DispatchAsync(evnt);
         }
 
-        public async Task SendRealTimeMessageAsync(params IMessage[] messages)
+        public Task SendRealTimeMessageAsync(params IMessage[] messages)
         {
             //just don't do anything during reply.
+            return Task.CompletedTask;
         }
 
-        public async Task SendLongTaskAsync(params IMessage[] messages)
+        public Task SendLongTaskAsync(params IMessage[] messages)
         {
             //just don't do anything during reply.
+            return Task.CompletedTask;
         }
     }
 }

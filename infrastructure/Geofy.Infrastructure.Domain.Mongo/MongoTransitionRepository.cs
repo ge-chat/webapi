@@ -54,7 +54,7 @@ namespace Geofy.Infrastructure.Domain.Mongo
             };
         }
 
-        public async Task CreateIndexes()
+        public Task CreateIndexes()
         {
 /*            var indexes = _transitionServer.Transitions.GetIndexes().Select(x => x.RawDocument["key"] as BsonDocument).ToList();
             foreach (var index in RequiredIndexes())
@@ -65,6 +65,7 @@ namespace Geofy.Infrastructure.Domain.Mongo
 
             _transitionServer.Snapshots.EnsureIndex(IndexKeys.Ascending("_id.StreamId").Descending("_id.Version"));
             _transitionServer.Snapshots.EnsureIndex(IndexKeys.Ascending("_id.StreamId"));*/
+            return Task.CompletedTask;
         }
 
         public async Task AppendTransition(Transition transition)

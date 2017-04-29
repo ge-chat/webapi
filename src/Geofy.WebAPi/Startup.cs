@@ -1,4 +1,4 @@
-﻿using EasyNetQ;
+﻿using System;
 using Geofy.WebAPi.Extensions;
 using Geofy.WebAPI.DependencyInjection;
 using Microsoft.AspNet.Builder;
@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StructureMap;
-using IServiceProvider = System.IServiceProvider;
 
 namespace Geofy.WebAPi
 {
@@ -20,9 +19,7 @@ namespace Geofy.WebAPi
 
             if (env.IsEnvironment("Development"))
             {
-                builder.AddApplicationInsightsSettings(developerMode: true)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json");
-
+                builder.AddJsonFile($"appsettings.{env.EnvironmentName}.json");
             }
 
             builder.AddEnvironmentVariables();
@@ -33,7 +30,6 @@ namespace Geofy.WebAPi
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplicationInsightsTelemetry(_configuration);
             services.AddMvc();
             var container = services.AddApplicationDependencies(_configuration);
             container.Populate(services);
@@ -46,9 +42,6 @@ namespace Geofy.WebAPi
 
             loggerFactory.AddConsole(_configuration.GetSection("Logging"))
                 .AddDebug();
-
-            app.UseApplicationInsightsRequestTelemetry()
-                .UseApplicationInsightsExceptionTelemetry();
 
             app.UseMvc();
         }

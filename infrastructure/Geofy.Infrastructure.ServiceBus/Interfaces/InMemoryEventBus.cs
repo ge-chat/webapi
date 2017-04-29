@@ -5,16 +5,18 @@ namespace Geofy.Infrastructure.ServiceBus.Interfaces
 {
     public class InMemoryEventBus : IEventBus
     {
-        public List<IEvent> Events = new List<IEvent>();
+        private readonly List<IEvent> _events = new List<IEvent>();
 
-        public async Task PublishAsync(IEvent eventMessage)
+        public Task PublishAsync(IEvent eventMessage)
         {
-            Events.Add(eventMessage);
+            _events.Add(eventMessage);
+            return Task.CompletedTask;
         }
 
-        public async Task PublishAsync(IEnumerable<IEvent> eventMessages)
+        public Task PublishAsync(IEnumerable<IEvent> eventMessages)
         {
-            Events.AddRange(eventMessages);
+            _events.AddRange(eventMessages);
+            return Task.CompletedTask;
         }
     }
 }

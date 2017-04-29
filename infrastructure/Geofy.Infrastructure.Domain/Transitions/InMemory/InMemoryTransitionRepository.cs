@@ -9,57 +9,62 @@ namespace Geofy.Infrastructure.Domain.Transitions.InMemory
     {
         private readonly List<Transition> _transitions = new List<Transition>();
 
-        public async Task AppendTransition(Transition transition)
+        public Task AppendTransition(Transition transition)
         {
             _transitions.Add(transition);
+            return Task.CompletedTask;
         }
 
-        public async Task AppendTransitions(IEnumerable<Transition> transitions)
+        public Task AppendTransitions(IEnumerable<Transition> transitions)
         {
             _transitions.AddRange(transitions);
+            return Task.CompletedTask;
         }
 
-        public async Task<List<Transition>> GetTransitions(string streamId, int fromVersion, int toVersion)
+        public Task<List<Transition>> GetTransitions(string streamId, int fromVersion, int toVersion)
         {
-            return _transitions.Where(t =>
+            return Task.FromResult(_transitions.Where(t =>
                 t.Id.StreamId == streamId &&
                 t.Id.Version >= fromVersion &&
                 t.Id.Version <= toVersion)
-                .ToList();
+                .ToList());
         }
 
-        public async Task<IEnumerable<Transition>> GetTransitions(int startIndex, int count)
+        public Task<IEnumerable<Transition>> GetTransitions(int startIndex, int count)
         {
-            return _transitions.Skip(startIndex).Take(count);
+            return Task.FromResult(_transitions.Skip(startIndex).Take(count));
         }
 
-        public async Task<long> CountTransitions()
+        public Task<long> CountTransitions()
         {
-            return _transitions.Count;
+            return Task.FromResult((long)_transitions.Count);
         }
 
         /// <summary>
         /// Get all transitions ordered ascendantly by Timestamp of transiton
         /// Should be used only for testing and for very simple event replying 
         /// </summary>
-        public async Task<IEnumerable<Transition>> GetTransitions()
+        public Task<IEnumerable<Transition>> GetTransitions()
         {
-            return _transitions;
+            return Task.FromResult(_transitions.AsEnumerable());
         }
 
-        public async Task RemoveTransition(string streamId, int version)
+        public Task RemoveTransition(string streamId, int version)
         {
             _transitions.RemoveAll(t => t.Id.StreamId == streamId && t.Id.Version == version);
+            return Task.CompletedTask;
         }
 
-        public async Task RemoveStream(string streamId)
+        public Task RemoveStream(string streamId)
         {
             _transitions.RemoveAll(t => t.Id.StreamId == streamId);
+            return Task.CompletedTask;
         }
 
-        public async Task CreateIndexes()
+        public Task CreateIndexes()
         {
             // Nothing to do here. In Memory Repository does not need indexes.
+            return Task.CompletedTask;
         }
     }
 }

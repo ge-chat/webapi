@@ -11,7 +11,6 @@
     "Geofy.Infrastructure.ServiceBus.RabbitMq": "1.0.0-*",
     "Geofy.ReadModels": "1.0.0-*",
     "Geofy.Shared": "1.0.0-*",
-    "Microsoft.ApplicationInsights.AspNet": "1.0.0-rc1",
     "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
     "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
     "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
@@ -31,7 +30,7 @@
   },
 
   "frameworks": {
-    "dnx46": { }
+    "net46": { }
   },
 
   "exclude": [
