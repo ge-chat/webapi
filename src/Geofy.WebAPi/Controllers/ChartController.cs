@@ -51,9 +51,29 @@ namespace Geofy.WebAPi.Controllers
         }
 
         [HttpGet("{id}")]
-        public Task<ChartReadModel> GetById(string id)
+        public async Task<ChartViewModel> GetById(string id)
         {
-            return _chartReadModelService.GetByIdAsync(id);
+            return MapToView(await _chartReadModelService.GetByIdAsync(id));
+        }
+
+        private ChartViewModel MapToView(ChartReadModel model)
+        {
+            return new ChartViewModel
+            {
+                AdminIds = model.AdminIds,
+                Id = model.Id,
+                Location = new Location
+                {
+                    Latitude = model.Location.Coordinates.Latitude,
+                    Longitude = model.Location.Coordinates.Longitude
+                },
+                OwnerId = model.OwnerId,
+                Participants = model.Participants,
+                Radius = model.Radius,
+                Title = model.Title,
+                Description = model.Description,
+                Messages = model.Messages
+            };
         }
 
         private ChartViewModelShort Map(ChartReadModel model)
