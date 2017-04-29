@@ -31,8 +31,12 @@ namespace Geofy.WebAPi.Authorization
             }
 
             var identity = new ClaimsIdentity(OpenIdConnectDefaults.AuthenticationScheme);
-            identity.AddClaim(ClaimTypes.NameIdentifier, user.Id, "token");
-            identity.AddClaim(ClaimTypes.Name, user.Email, "token");
+            identity.AddClaim(ClaimTypes.NameIdentifier, user.Id,
+                OpenIdConnectConstants.Destinations.AccessToken,
+                OpenIdConnectConstants.Destinations.IdentityToken);
+            identity.AddClaim(ClaimTypes.Name, user.Email,
+                OpenIdConnectConstants.Destinations.AccessToken,
+                OpenIdConnectConstants.Destinations.IdentityToken);
 
             var ticket = new AuthenticationTicket(new ClaimsPrincipal(identity),
                 new AuthenticationProperties(),

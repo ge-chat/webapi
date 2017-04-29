@@ -10,7 +10,8 @@ namespace Geofy.WebAPi.SignalR.Handlers
 {
     public class ChartSignalHandler :
         IMessageHandlerAsync<ChartCreatedSignal>,
-        IMessageHandlerAsync<MessagePostedSignal>
+        IMessageHandlerAsync<MessagePostedSignal>,
+        IMessageHandlerAsync<ParticipantAddedSignal>
     {
         private readonly IHubContext _chartHub;
 
@@ -31,7 +32,26 @@ namespace Geofy.WebAPi.SignalR.Handlers
             return Task.CompletedTask;
         }
 
+        public Task HandleAsync(ParticipantAddedSignal message)
+        {
+            _chartHub.Clients.Group(message.Metadata.UserId).participantAdded(Map(message));
+            return Task.CompletedTask;
+        }
+
         //Convert to camelcase due to SignalR configuration mismatch
+        private object Map(ParticipantAddedSignal message)
+        {
+            return new
+            {
+                chartId = message.ChartId,
+                participant = new
+                {
+                    userId = message.Participant.UserId,
+                    userName = message.Participant.UserName
+                }
+            };
+        }
+
         private object Map(ChartCreatedSignal message)
         {
             return new

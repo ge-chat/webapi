@@ -10,13 +10,19 @@ namespace Geofy.WebAPi.SignalR.Hubs
         public override Task OnConnected()
         {
             var identity = (ClaimsIdentity) Context.User.Identity;
-            return Groups.Add(Context.ConnectionId, identity.GetClaim(ClaimTypes.NameIdentifier));
+            var groupId = identity.GetClaim(ClaimTypes.NameIdentifier);
+            return !string.IsNullOrEmpty(groupId)
+                ? Groups.Add(Context.ConnectionId, groupId)
+                : Task.CompletedTask;
         }
 
         public override Task OnDisconnected(bool stopCalled)
         {
             var identity = (ClaimsIdentity)Context.User.Identity;
-            return Groups.Remove(Context.ConnectionId, identity.GetClaim(ClaimTypes.NameIdentifier));
+            var groupId = identity.GetClaim(ClaimTypes.NameIdentifier);
+            return !string.IsNullOrEmpty(groupId) 
+                ? Groups.Remove(Context.ConnectionId, groupId) :
+                Task.CompletedTask;
         }
     }
 }
