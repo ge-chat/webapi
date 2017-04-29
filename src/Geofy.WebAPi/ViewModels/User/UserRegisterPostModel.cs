@@ -3,7 +3,7 @@ using Geofy.Shared.Resources;
 
 namespace Geofy.WebAPi.ViewModels.User
 {
-    public class UserRegisterViewModel
+    public class UserRegisterPostModel
     {
         [Required(ErrorMessage = MessageConstants.Errors.EmailRequired)]
         [EmailAddress(ErrorMessage = MessageConstants.Errors.EmailInvalid)]

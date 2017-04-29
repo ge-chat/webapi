@@ -17,7 +17,8 @@ namespace Geofy.EventHandlers
 {
     public class ChartEventHandler :
         IMessageHandlerAsync<ChartCreated>,
-        IMessageHandlerAsync<MessagePosted>
+        IMessageHandlerAsync<MessagePosted>,
+        IMessageHandlerAsync<ParticipantNameChanged>
     {
         private readonly IMongoCollection<ChartReadModel> _chartMongoCollection;
         private readonly UserReadModelService _userReadModelService;
@@ -73,7 +74,7 @@ namespace Geofy.EventHandlers
 
         public async Task HandleAsync(MessagePosted message)
         {
-            //TODO bad perfomance
+            //TODO improve perfomance
             var participants = (await _chartReadModelService.GetByIdAsync(message.ChartId)).Participants;
             var user = await _userReadModelService.GetByIdAsync(message.UserId);
             var update = Builders<ChartReadModel>.Update.Push(x => x.Messages, new MessageReadModel
@@ -119,6 +120,26 @@ namespace Geofy.EventHandlers
                 MessageId = message.ChartId,
                 Message = message.Message,
                 ChartId = message.ChartId,
+                Metadata = new MessageMetadata
+                {
+                    UserId = message.Metadata.UserId,
+                    MessageId = message.Metadata.EventId
+                }
+            });
+        }
+
+        public async Task HandleAsync(ParticipantNameChanged message)
+        {
+            await _chartMongoCollection.UpdateOneAsync(
+                Builders<ChartReadModel>.Filter.Where(
+                    x => x.Id == message.ChatId && x.Participants.Any(i => i.UserId == message.UserId)),
+                Builders<ChartReadModel>.Update.Set(x => x.Participants[-1].UserName, message.Name));
+
+            await _messageBus.SendRealTimeMessageAsync(new ParticipantNameChangedSignal
+            {
+                ChatId = message.ChatId,
+                Name = message.Name,
+                UserId = message.UserId,
                 Metadata = new MessageMetadata
                 {
                     UserId = message.Metadata.UserId,

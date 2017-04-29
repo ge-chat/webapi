@@ -20,7 +20,7 @@ namespace Geofy.WebAPi.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody]CreateMessageViewModel model)
+        public async Task<IActionResult> Create([FromBody]CreateMessagePostModel model)
         {
             if (!ModelState.IsValid) return new GeofyBadRequest(ModelState);
             await SendAsync(new PostMessage

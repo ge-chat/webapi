@@ -2,7 +2,7 @@
 
 namespace Geofy.WebAPi.ViewModels.Message
 {
-    public class CreateMessageViewModel
+    public class CreateMessagePostModel
     {
         [Required]
         public string ChartId { get; set; }

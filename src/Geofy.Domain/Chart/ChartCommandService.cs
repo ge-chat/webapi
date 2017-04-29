@@ -8,7 +8,8 @@ namespace Geofy.Domain.Chart
 {
     public class ChartCommandService :
         IMessageHandlerAsync<CreateChart>,
-        IMessageHandlerAsync<PostMessage>
+        IMessageHandlerAsync<PostMessage>,
+        IMessageHandlerAsync<ChangeParticipantName>
     {
         private readonly IRepository<ChartAggregate> _repository;
 
@@ -25,6 +26,11 @@ namespace Geofy.Domain.Chart
         public Task HandleAsync(PostMessage message)
         {
             return _repository.Perform(message.ChartId, x => x.PostMessage(message), message.Metadata);
+        }
+
+        public Task HandleAsync(ChangeParticipantName message)
+        {
+            return _repository.Perform(message.ChatId, x => x.ChangePaticipantName(message), message.Metadata);
         }
     }
 }

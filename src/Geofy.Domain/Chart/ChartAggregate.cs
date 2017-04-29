@@ -31,5 +31,15 @@ namespace Geofy.Domain.Chart
                 UserId = cmd.UserId
             });
         }
+
+        public void ChangePaticipantName(ChangeParticipantName cmd)
+        {
+            Apply(new ParticipantNameChanged
+            {
+                ChatId = cmd.ChatId,
+                UserId = cmd.UserId,
+                Name = cmd.Name
+            });
+        }
     }
 }

@@ -4,7 +4,7 @@ using Geofy.Shared.Resources;
 
 namespace Geofy.WebAPi.ViewModels.User
 {
-    public class LoginViewModel
+    public class LoginPostModel
     {
         [Required(ErrorMessage = MessageConstants.Errors.EmailRequired)]
         [EmailAddress(ErrorMessage = MessageConstants.Errors.EmailInvalid)]

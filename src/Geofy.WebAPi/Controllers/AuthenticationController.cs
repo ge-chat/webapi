@@ -22,7 +22,7 @@ namespace Geofy.WebAPi.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody]UserRegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody]UserRegisterPostModel model)
         {
             var userExists = await _authenticationService.UserExists(model.Email);
             if (userExists)

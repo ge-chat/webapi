@@ -2,7 +2,7 @@
 
 namespace Geofy.WebAPi.ViewModels.Chart
 {
-    public class CreateChartViewModel
+    public class CreateChartPostModel
     {
         [Required]
         public string Title { get; set; }

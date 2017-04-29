@@ -6,6 +6,7 @@ using Geofy.Infrastructure.ServiceBus.Interfaces;
 using Geofy.ReadModels;
 using Geofy.ReadModels.Services.Chart;
 using Geofy.Shared.Mongo;
+using Geofy.Shared.Resources;
 using Geofy.WebAPi.ViewModels.Chart;
 using Geofy.WebAPI.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +27,7 @@ namespace Geofy.WebAPi.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody]CreateChartViewModel model)
+        public async Task<IActionResult> Create([FromBody]CreateChartPostModel model)
         {
             if(!ModelState.IsValid) return new GeofyBadRequest(ModelState);
             await SendAsync(new CreateChart
@@ -54,6 +55,30 @@ namespace Geofy.WebAPi.Controllers
         public async Task<ChartViewModel> GetById(string id)
         {
             return MapToView(await _chartReadModelService.GetByIdAsync(id));
+        }
+
+        [HttpPost("changeName")]
+        public async Task<IActionResult> ChangeName([FromBody]ParticipantChangeNameModel model)
+        {
+            var chart = await _chartReadModelService.GetByIdAsync(model.ChatId);
+            if (chart == null || chart.Participants.All(x => x.UserId != UserId))
+            {
+                ModelState.AddModelError(nameof(chart), MessageConstants.Errors.UserNotInChat);
+                return new GeofyBadRequest(ModelState);
+            }
+            if (chart.Participants.Any(x => x.UserName == model.Name))
+            {
+                ModelState.AddModelError(nameof(chart), MessageConstants.Errors.UserAlreadyInChat);
+                return new GeofyBadRequest(ModelState);
+            }
+
+            await SendAsync(new ChangeParticipantName
+            {
+                ChatId = model.ChatId,
+                Name = model.Name,
+                UserId = UserId
+            });
+            return Ok();
         }
 
         private ChartViewModel MapToView(ChartReadModel model)
